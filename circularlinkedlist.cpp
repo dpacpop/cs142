@@ -1,183 +1,277 @@
-#include<iostream>
+/*
+This program implements Singly Linked List using C++ which includes the following functions: 
+insert(int data)  
+insertAt(int pos, int data)  
+delete()
+deleteAt(int pos)
+countItems()
+display()
+*/
+
+#include <iostream>
 using namespace std;
-class Node //contains data and pointer which points to the next element in the list//
+
+class Node
 {
     public:
-        int data;
-        Node*next;
-   
-    Node() //constructor=>initialises the values//
+    int data;
+    Node* next;
+    Node()
     {
-   	    data=0;
-   	    next=NULL;
+        data=0;
+        next=NULL;
     }
 };
-class LinkedList /*contains a variable, a pointer head which points to the 
-                  first element and tail which points to NULL in the linked list.*/
+class CLL
 {
-	public:
-	    Node*head;
-	    Node*tail;
-	    int c; //counter=>used to count the number of elements//
-	
-	    LinkedList() //constructor//
-	    {
-		    head=NULL;
-		    tail=NULL;
-		    c=0;
-	    }
-	    
-//calling the member functions of the class "LinkedList"// 
-	    void insert(int data);
-	    void insertAt(int pos,int data);
-	    void del();
-	    void deleteAt(int pos);
-	    int countItems();
-	    void display();
+    Node* head;
+    Node* tail;
+    int size;
+    public:
+    CLL()
+    {
+        size=0;
+        head=NULL;
+        tail=NULL;
+    }
+   void insert(int n);
+   void insertAt(int data, int position);
+   void deleten();
+   void deleteAt(int pos);
+   int countItems();
+   void display();
 };
 
-void LinkedList :: insert(int data) /*
-                                    *Executing the member functions outside of the 
-									class "LinkedList".
-                                    *This function is used to add a new node at the 
-									end of the linked list.
-									*/
+
+//inserts a node at the end of the circle
+void CLL::insert(int n)
 {
-	Node*temp=new Node; //making a new node//
-	temp->data=data; //assigning data to the node//
-	
-	if(head==NULL) //for an empty linked list//
-	{
-		head=temp;
-		tail=temp;
-	}
-	
-	else //for a non-empty linked list//
-	{
-		tail->next=temp;
-		tail=temp;
-	}
-	tail->next=head;//the next of the last node points toward the 1st node
-	c++; //the size of the linked list is now increased by 1.//
+    Node* temp=new Node;
+    temp->data=n;
+    temp->next=NULL;
+    if(head==NULL)
+    {
+        head=temp;
+        head->next=head;
+        tail=temp;
+        tail->next=head;
+    }
+    else
+    {
+        tail->next=temp;
+        tail=temp;
+        tail->next=head;
+    }
+    size++;
 }
 
-void LinkedList :: insertAt(int pos, int data) /*used to insert a new node at a 
-                                                position other than the end*/
+
+
+/*
+   It includes the position at which the insertion happens. Positioning starts with 1.  
+   Example: insertAt(1, 3)inserts 3 at the first position. 
+	    It should print a statement “Linked List does not have that many elements” if the position does not exist in the linked list.
+*/ 
+void CLL::insertAt(int position, int num)
 {
-	if(pos>c)
-	{
-		cout<<"Not that many elements in the list dude!\n";
-	}
-	
-	else if(pos==c)
-	    insert(data); //calling the insert function in this function//
-	
-	else if(pos==1)
-	{
-		Node*temp=new Node;
-		temp->data=data;
-		temp->next=head;
-		head=temp;
-		c++;
-	}
-	
-	else
-	{
-		Node*temp=new Node;
-		temp->data=data;
-		Node*p=head; //creating a new pointer and assigning it as the head pointer//
-		
-		for(int i=1;i<pos;i++) //to reach the intended position//
+    if(position>size)
+    {
+        cout<<"\nNot many elements in the list present !";
+    }
+    else if(position==0)
+    {
+        Node* tmp=new Node;
+        tmp->data=num;
+        tmp->next=head;
+        head=tmp;
+        size++;
+    }
+    else if(position==size)
+    {
+        Node* tmp=new Node;
+        tmp->data=num;
+        tmp->next=head;
+        if(head==NULL)                           // Steps to perform when the list is empty.
+        {
+            head=tmp;
+        }
+        else
+        {
+            tail->next=tmp;
+        }
+        tail=tmp;
+        size++;
+    }
+    else
+    {
+        Node* n=new Node;
+	    n->data=num;
+	    Node* traverse=head;
+        int count=0;
+        while(count<position-1)
+        {
+          traverse=traverse->next;
+          count++;
+        }
+        n->next=traverse->next;
+        traverse->next=n;
+        size++;
+    }
+}
+  
+  
+  
+//Deletes the element at the end of the list 
+   void CLL::deleten()
+   {
+        Node* traverse = head;                                          //goes to the 2nd last
+	    int count=0;
+		while(count<size-2)
 		{
-			p=p->next;
+			traverse = traverse->next;
+			count++;
 		}
 		
-		temp->next=p->next;
-		p->next=temp;
-		c++;
-	}
-}
+		tail = traverse;
+		traverse->next = head;
+		size--;
 
-void LinkedList :: del() //used to delete the element at the end//
-{
-	Node*p=head;
-	Node*q; /*creating a new temporary pointer that after reaching the end 
-	         points to the last element so that we can delete that element*/
-	
-	for(int i=1;i<c;i++)
-	{
-		p=p->next;
-	}
-	
-	q=p->next;
-	p->next=NULL;
-	delete q; //deleting the new pointer//
-	c--; //the size of the linked list is now reduced by 1.//
-}
+   }
+   
+   
+   
+   //Deletes the element(or node) at the position pos
+   void CLL::deleteAt(int pos)
+   {
+      if(pos>=size)
+      {
+	      cout<<"\n \nList doesn't have that many elements \n";
+	      return;
+      }
+      int count=0;
+      Node* temp, *temp1;
+      temp = head  ;
+      
+      if(head==NULL)                              // Steps to perform when the list is empty.
+      {
+        cout<<"\n \nLinked List Empty !!!";
+	      return;
+      }
+      else if(pos == 0)
+      {
+        head = head->next;
+        delete temp;
+        size--;
+      }
+      else
+      {
+      while(count!= pos-1)
+      {
+         temp = temp->next;
+         count++;   
+      }
+      temp1 = temp->next;
+      temp->next = temp1->next;
+      temp1->next=NULL;
+      delete temp1;
+      size--;
+      }
+   }
+   
+   
+//Returns the number of items in the linked list. 
+   int CLL::countItems()
+   {
+      //using size variable
+	  int s=size;
+	   return s; 
+   }
+   
+   
+//Displays all the elements in the linked list. Format should be followed as “1 -> 2 -> 3 -> 4 -> NULL” for a linked list holding integers in the order 1,2,3,4. 
+   void CLL::display()
+   {
+    if(head==NULL)
+      cout << "\n \nNULL \n \nThe List is empty";             // Steps to perform when the list is empty.
+    else
+    {
+      Node *temp = head;
+      cout<<"\n \n";
+      while(temp->next!=head)
+      {
+       cout << temp->data;
+       cout<<"  -->  ";
+       temp = temp->next;
+      }
+      cout<<temp->data<<" --> NULL \n";
+     }
+    }
 
-void LinkedList :: deleteAt(int pos) //used to delete an element at any position//
-{
-	if(pos>c)
-	    cout<<"Not that many elements in the list dude!\n";
-	
-	else if(pos==c)
-	    del(); //calling the delete function//
-	
-	else if(pos==1)
-	{
-		Node*p=head;
-		head=p->next;
-		delete p;
-		c--;
-	}
-	
-	else
-	{
-		Node*p=head;
-		Node*q;
-		
-		for(int i=1;i<pos;i++)
-		{
-			p=p->next;
-		}
-		
-		q=p->next;
-		p->next=q->next;
-		delete q;
-		c--;
-	}
-}
 
-int LinkedList :: countItems() //used to count the size of the linked list//
-{
-	return c; //returns the value of 'c' to int main//
-}
 
-void LinkedList :: display() //displays the linked list//
+//Main function to implement all the data structures and functions together
+int main()
 {
-	Node*p=head;
+    int ch,x;
+    char cha;
+    int pos;
+    CLL S;
+    cout<<"\n \nPROGRAM TO USE THE CONCEPT OF LINKED LIST";
 	
-	while(p->next!=head)
-	{
-		cout<<p->data<<"->";
-		p=p->next;
-	}
-	cout<<p->next<<"\n";
-}
-
-int main() //executing the functions//
-{
-	LinkedList l;
-	
-	for(int i=0;i<10;i++)
-	{
-		l.insert(i+1);
-	}
-	
-	l.insertAt(5,7);
-	l.deleteAt(8);
-	l.display();
-	cout<<"The number of elements in the list are "<<l.countItems()<<"\n";
-	
-	return 0;
+    //running a loop that asks continously to the user until "n" is received as an input
+    do 
+    {
+       cout<<"\n1. Insert a node at the end \n2. Insert a node at a position specified \n3. Delete a node at the end ";
+       cout<<"\n4. Delete a node at a position specifed \n5. Count the number of items \n6. Display ";
+       cout<<"\nPlease enter your choice: ";
+       cin>>ch;
+       switch(ch)
+       {
+       case 1:
+       {
+              cout<<"\nEnter the data: ";
+              cin>>x;
+              S.insert(x);
+              break;
+        }
+       case 2:
+         {     cout<<"\nEnter the data to be inserted ";
+              cin>>x;
+              cout<<"\nEnter the position to insert the node ";
+              cin>>pos;
+              S.insertAt(pos,x);
+              break;
+          }
+      case 3:
+       {
+		 S.deleten();	  
+		 break;
+       }
+       case 4:
+           {   cout<<"\nEnter the position of node to be deleted ";
+              cin>>pos;
+              S.deleteAt(pos);
+              break;
+	   }
+       case 5:
+          {
+		  int num=0;
+		  num=S.countItems();
+		  cout<<"\n \nThe number of items in the Linked List is: "<<num;
+		  break;
+	  }		       
+       case 6:
+             {
+                 S.display();
+                 break;
+              }
+       default:
+             { cout<<"\nWrong choice !!!!";
+             break;}
+    }
+    cout<<"Do you want to continue? (y/n)  ";
+    cin>>cha;
+    }
+    while(cha=='y' || cha=='Y');
+    return 0;
 }

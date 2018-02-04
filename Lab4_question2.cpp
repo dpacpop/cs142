@@ -2,10 +2,6 @@
 #include<iostream>
 using namespace std;
 
-/*  Program to create a queue from two stacks   */
-
-//1711140
-
 class node{                 //this is to create the node
 	public:
 	float data; 

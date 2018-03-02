@@ -18,12 +18,13 @@ class node
 class linkedList
 {
  public:
- int size=0;
+ int size;
  node *head,*tail;
  linkedList()
  {
   head=NULL;
   tail=NULL;
+  size=0;
  }
  void addNode(int data)
  {

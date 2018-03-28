@@ -73,6 +73,7 @@ void display(node* v)
 void deletenode(int key, node* v)
 {
   node* temp=root;
+  node* par;
   if(v==NULL)
   {
     cout<<"\n \nElement not found !!!\nCan not delete the data entered !";
@@ -81,7 +82,6 @@ void deletenode(int key, node* v)
   
   if(v->left==NULL && v->right==NULL)
   {
-    node* par;
     par=v->parent;
     if(par->data>=v->data)
     {
@@ -94,7 +94,6 @@ void deletenode(int key, node* v)
   }
   else if((v->left==NULL || v->right==NULL ))
    {
-     node* par;
      node* schild;
      par=v->parent; 
      if(v->left==NULL)
@@ -124,13 +123,13 @@ void deletenode(int key, node* v)
     }
    if(maxleft->left==NULL)
    {
-     node* par=maxleft->parent;
+     par=maxleft->parent;
      par->right=NULL;
      v->data=maxleft->data;
    }
    else
    {
-     node* par=maxleft->parent;
+     par=maxleft->parent;
      par->right=maxleft->left;
      v->data=maxleft->data;
    }
